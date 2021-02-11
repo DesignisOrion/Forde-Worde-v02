@@ -3,6 +3,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QKeySequence, QPalette, QColor
 from PyQt5.QtCore import Qt
 
+import speech_recognition as sr 
+import pyttsx3
+
 app = QApplication([])
 
 # Force the style to be the same on all OSs:
@@ -27,7 +30,7 @@ app.setPalette(palette)
 
 # The rest of the code is the same as for the "normal" text editor.
 
-app.setApplicationName("Forde Worde (BETA)")
+app.setApplicationName("Forde Worde v.02 (BETA)")
 
 text = QPlainTextEdit()
 
@@ -45,14 +48,11 @@ class MainWindow(QMainWindow):
             save()
         elif answer & QMessageBox.Cancel:
             e.ignore()
-# Created by DesignIsOrion (2020)
-
-
 window = MainWindow()
 window.setCentralWidget(text)
-
 file_path = None
 
+# file menu
 menu = window.menuBar().addMenu("&File")
 open_action = QAction("&Open")
 
@@ -107,13 +107,52 @@ close = QAction("&Close")
 close.triggered.connect(window.close)
 menu.addAction(close)
 
+
+# henry menu
+
+def henry_app():
+    listener = sr.Recognizer()
+    engine = pyttsx3.init()
+    engine.say('I am Henry The Butler')
+    engine.say('How can I assist you Mr. Ford?')
+    engine.runAndWait()
+
+
+    try:
+        # recording from mic and recording
+        with sr.Microphone() as source:
+                
+            # Infoming user that Henry is listening.
+            print('Henry is listening...')
+            voice = listener.listen(source)
+            # functions for voice to text
+            command = listener.recognize_google(voice)
+                
+            # dictate if Henry is there or not.
+            # This will allow it to be called only when saying Henry
+            command = command.lower()
+            if 'Henry' in command:
+                    print(command)
+    except:
+        pass
+    
+
+henry_menu = window.menuBar().addMenu("&Henry")
+henry_action = QAction("&Henry")
+henry_menu.addAction(henry_action)
+
+henry_action.triggered.connect(henry_app)
+
+
+# help menu
+
 help_menu = window.menuBar().addMenu("&Help")
 about_action = QAction("&About")
 help_menu.addAction(about_action)
 
 # Created by DesignIsOrion (2020)
 
-
+# About dialog box
 def show_about_dialog():
     text = "<center>" \
            "<h1>Forde Worde</h1>" \
@@ -121,11 +160,14 @@ def show_about_dialog():
            "<img src=fist.svg>" \
            "</center>" \
            "<p>Version 2.0<br/>" \
-           "Copyright &copy; 2020 DesignIsOrion.com</p>"
+           "Copyright &copy; 2021 DesignIsOrion.com</p>"
     QMessageBox.about(window, "About Forde Worde v2", text)
 
 
 about_action.triggered.connect(show_about_dialog)
+
+
+
 
 window.show()
 app.exec_()
