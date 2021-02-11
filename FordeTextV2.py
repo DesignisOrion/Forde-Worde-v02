@@ -114,7 +114,7 @@ def henry_app():
     listener = sr.Recognizer()
     engine = pyttsx3.init()
     engine.say('I am Henry The Butler')
-    engine.say('How can I assist you Mr. Ford?')
+    engine.say('Start speaking and I will begin typing right away.')
     engine.runAndWait()
 
 
@@ -132,11 +132,11 @@ def henry_app():
             # This will allow it to be called only when saying Henry
             command = command.lower()
             if 'Henry' in command:
+                    command = command.replace('henry', '')
                     print(command)
     except:
-        pass
-    
-
+        pass 
+                
 henry_menu = window.menuBar().addMenu("&Henry")
 henry_action = QAction("&Henry")
 henry_menu.addAction(henry_action)
