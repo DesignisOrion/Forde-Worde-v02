@@ -5,7 +5,6 @@ This project allows you to open a GUI with text editor features.
 
 ### Technologies Used:
 - Python 3
-- Tkinter
 - PyQT5
 
 ### What I learned:
